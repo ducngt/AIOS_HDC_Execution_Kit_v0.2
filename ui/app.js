@@ -164,11 +164,11 @@
     }
 
     dictionary =
-      await getJson("/ui/i18n/" + locale + ".json");
+      await getJson("./i18n/" + locale + ".json");
 
     fallback =
       await getJson(
-        "/ui/i18n/" + registry.fallback + ".json"
+        "./i18n/" + registry.fallback + ".json"
       );
 
     localStorage.setItem("aios.locale", locale);
@@ -213,7 +213,7 @@
 
   async function start() {
     registry =
-      await getJson("/ui/i18n/locales.json");
+      await getJson("./i18n/locales.json");
 
     buildLocaleSelector();
 
@@ -224,13 +224,13 @@
     await applyLocale(saved);
 
     task =
-      await getJson("/tasks/T00/task.json");
+      await getJson("./tasks/T00/task.json");
 
     renderTask();
 
     if (task.human_gate && task.human_gate.record) {
       document.getElementById("decisionRecord").textContent =
-        await getText("/" + task.human_gate.record);
+        await getText("./" + task.human_gate.record);
     }
   }
 
