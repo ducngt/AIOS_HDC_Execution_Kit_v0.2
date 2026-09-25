@@ -1,0 +1,18 @@
+{
+  "task_id": "T00",
+  "title": "HDC Guard",
+  "version": "0.2.0",
+  "status": "proposed",
+  "objective": "Establish the enforceable HDC governance and verification baseline for all subsequent tasks.",
+  "human_gate_required": true,
+  "implementation_allowed_before_gate": false,
+  "required_outputs": [
+    "task contract",
+    "HDC guard implementation",
+    "contract validation",
+    "regression tests",
+    "engineering evidence",
+    "acceptance package",
+    "CI enforcement"
+  ]
+}
