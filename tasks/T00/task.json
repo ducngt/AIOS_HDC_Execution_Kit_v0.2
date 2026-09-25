@@ -2,7 +2,7 @@
   "task_id": "T00",
   "title": "HDC Guard",
   "version": "0.2.0",
-  "status": "proposed",
+  "status": "approved",
   "objective": "Establish the enforceable HDC governance and verification baseline for all subsequent tasks.",
   "human_gate_required": true,
   "implementation_allowed_before_gate": false,
@@ -14,5 +14,9 @@
     "engineering evidence",
     "acceptance package",
     "CI enforcement"
-  ]
+  ],
+  "human_gate": {
+    "decision": "approved",
+    "record": "governance/decisions/T00_HUMAN_GATE.md"
+  }
 }
