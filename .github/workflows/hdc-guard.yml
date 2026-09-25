@@ -2,9 +2,6 @@ name: HDC Guard
 
 on:
   push:
-    branches:
-      - main
-      - 'change/**'
   pull_request:
     branches:
       - main
