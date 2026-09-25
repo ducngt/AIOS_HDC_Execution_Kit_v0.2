@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "overview": "Tổng quan",
+    "work": "Công việc",
+    "data": "Dữ liệu",
+    "workspace": "Không gian",
+    "ai": "AI",
+    "admin": "Quản trị"
+  },
+  "context": {
+    "overview": "Tổng quan",
+    "contract": "Contract",
+    "implementation": "Triển khai",
+    "test": "Kiểm thử",
+    "verify": "Xác minh",
+    "evidence": "Bằng chứng",
+    "audit": "Kiểm toán"
+  },
+  "dashboard": {
+    "kit": "Bộ thực thi",
+    "task": "Công việc hiện tại",
+    "status": "Trạng thái",
+    "gate": "Cổng phê duyệt",
+    "sequence": "Trình tự thực thi",
+    "contract": "Contract T00",
+    "authority": "Thẩm quyền con người",
+    "decision": "Hồ sơ quyết định"
+  },
+  "fields": {
+    "taskId": "Mã công việc",
+    "title": "Tên",
+    "objective": "Mục tiêu",
+    "gateRequired": "Yêu cầu Human Gate",
+    "beforeGate": "Triển khai trước Gate"
+  },
+  "authority": {
+    "decision": "Quyết định",
+    "implementation": "Quyền triển khai",
+    "acceptance": "Chấp nhận cuối cùng",
+    "source": "Nguồn",
+    "authorized": "Được phép",
+    "notGranted": "Chưa cấp"
+  },
+  "status": {
+    "approved": "Đã phê duyệt",
+    "pending": "Đang chờ"
+  },
+  "readonly": "Giao diện chỉ đọc · trạng thái được lấy từ repository"
+}
