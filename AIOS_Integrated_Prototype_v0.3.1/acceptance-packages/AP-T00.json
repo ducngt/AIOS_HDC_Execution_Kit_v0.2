@@ -1,0 +1,8 @@
+{
+  "acceptance_id": "AP-T00",
+  "task_id": "T00",
+  "change_id": "CP-T00",
+  "evidence_id": "EE-T00",
+  "decision_record": "governance/decisions/T00_HUMAN_ACCEPTANCE.md",
+  "decision": "accepted"
+}

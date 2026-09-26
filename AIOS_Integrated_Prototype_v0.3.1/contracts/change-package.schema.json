@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "change-package.schema.json",
+  "title": "HDC Change Package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "change_id",
+    "task_id",
+    "base_ref",
+    "branch",
+    "changed_files",
+    "rationale"
+  ],
+  "properties": {
+    "change_id": {
+      "type": "string",
+      "pattern": "^CP-[A-Za-z0-9._-]+$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^T[0-9]{2}$"
+    },
+    "base_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "branch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "changed_files": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
