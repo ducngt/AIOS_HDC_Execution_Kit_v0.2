@@ -281,3 +281,83 @@ pre {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* T00 compact-density refinement */
+:root {
+  --ui-font-scale: 0.86;
+  --ui-space-1: 0.25rem;
+  --ui-space-2: 0.375rem;
+  --ui-space-3: 0.5rem;
+  --ui-space-4: 0.75rem;
+  --ui-card-padding: 0.75rem;
+  --ui-section-gap: 0.75rem;
+  --ui-grid-gap: 0.75rem;
+  --ui-control-height: 2.15rem;
+}
+
+html {
+  font-size: calc(16px * var(--ui-font-scale));
+}
+
+body {
+  line-height: 1.35;
+}
+
+main,
+.app-main,
+.workspace,
+.page-shell {
+  gap: var(--ui-section-gap);
+}
+
+section,
+.panel,
+.card,
+.surface {
+  margin-block: var(--ui-space-2);
+}
+
+.card,
+.panel,
+.surface {
+  padding: var(--ui-card-padding);
+}
+
+.grid,
+.cards,
+.summary-grid,
+.metrics-grid {
+  gap: var(--ui-grid-gap);
+}
+
+header,
+.topbar,
+.primary-nav,
+.secondary-nav,
+.context-bar {
+  min-height: unset;
+}
+
+.primary-nav a,
+.secondary-nav a,
+.topbar a,
+button,
+select,
+input {
+  min-height: var(--ui-control-height);
+}
+
+table th,
+table td {
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+}
+
+h1, h2, h3, h4,
+p,
+ul,
+ol {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+}
