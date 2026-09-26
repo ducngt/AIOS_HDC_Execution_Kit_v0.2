@@ -1,0 +1,27 @@
+{
+  "change_id": "CP-T01",
+  "task_id": "T01",
+  "base_ref": "origin/main",
+  "branch": "change/t01-canonical-meta-model",
+  "changed_files": [
+    "contracts/canonical-identity.schema.json",
+    "contracts/canonical-lifecycle.schema.json",
+    "contracts/canonical-meta-model.schema.json",
+    "contracts/canonical-object.schema.json",
+    "contracts/canonical-reference.schema.json",
+    "docs/CANONICAL_META_MODEL.md",
+    "docs/META_MODEL_INVARIANTS.md",
+    "docs/META_MODEL_VERSIONING.md",
+    "governance/decisions/T01_HUMAN_GATE.md",
+    "hdc/canonical.py",
+    "hdc/cli.py",
+    "hdc/validator.py",
+    "manifests/canonical/meta-model.json",
+    "tasks/T01/ACCEPTANCE.md",
+    "tasks/T01/PROMPT.md",
+    "tasks/T01/README.md",
+    "tasks/T01/task.json",
+    "tests/test_canonical_meta_model.py"
+  ],
+  "rationale": "Establish the AIOS Canonical Meta-Model with machine-verifiable identity, reference, lifecycle and canonical object contracts; explicit concept families and invariants; semantic versioning; typed cross-object reference integrity; and HDC validator/CLI support."
+}
