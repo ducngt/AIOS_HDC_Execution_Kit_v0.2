@@ -8,7 +8,7 @@ version = "0.2.0"
 description = "Human-Directed Coding Execution Kit for AIOS"
 requires-python = ">=3.11"
 dependencies = [
-    "jsonschema>=4.22,<5"
+    "jsonschema[format]>=4.22,<5"
 ]
 
 [project.scripts]
