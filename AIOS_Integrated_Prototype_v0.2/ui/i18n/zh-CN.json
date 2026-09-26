@@ -1,0 +1,52 @@
+{
+  "nav": {
+    "overview": "总览",
+    "work": "工作",
+    "data": "数据",
+    "workspace": "工作空间",
+    "ai": "AI",
+    "admin": "管理"
+  },
+  "context": {
+    "overview": "总览",
+    "contract": "契约",
+    "implementation": "实施",
+    "test": "测试",
+    "verify": "验证",
+    "evidence": "证据",
+    "audit": "审计"
+  },
+  "dashboard": {
+    "kit": "执行套件",
+    "task": "当前任务",
+    "status": "状态",
+    "gate": "人工审批关卡",
+    "sequence": "执行流程",
+    "contract": "T00 契约",
+    "authority": "人工权限",
+    "decision": "决策记录"
+  },
+  "fields": {
+    "taskId": "任务编号",
+    "title": "名称",
+    "objective": "目标",
+    "gateRequired": "需要人工审批",
+    "beforeGate": "审批前实施"
+  },
+  "authority": {
+    "decision": "决策",
+    "implementation": "实施权限",
+    "acceptance": "最终验收",
+    "source": "来源",
+    "authorized": "已授权",
+    "notGranted": "尚未授予"
+  },
+  "status": {
+    "approved": "已批准",
+    "pending": "待处理",
+    "implementing": "实施中",
+    "evidenced": "已形成证据",
+    "accepted": "已验收"
+  },
+  "readonly": "只读控制台 · 状态来源于代码仓库"
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "engineering-evidence.schema.json",
+  "title": "HDC Engineering Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_id",
+    "task_id",
+    "change_id",
+    "test_results",
+    "verification_results",
+    "replay_results"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^EE-[A-Za-z0-9._-]+$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^T[0-9]{2}$"
+    },
+    "change_id": {
+      "type": "string",
+      "pattern": "^CP-[A-Za-z0-9._-]+$"
+    },
+    "test_results": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "verification_results": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "replay_results": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
