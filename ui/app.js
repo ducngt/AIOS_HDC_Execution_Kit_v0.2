@@ -79,12 +79,21 @@
       Repository currently proves completion through Human Gate.
       Implementation/test/etc. are not marked complete.
     */
+    const lifecycleCompleted = {
+      proposed: 3,
+      contracted: 4,
+      gated: 6,
+      implementing: 6,
+      testing: 7,
+      verified: 9,
+      replayed: 10,
+      evidenced: 11,
+      awaiting_acceptance: 11,
+      accepted: 12
+    };
+
     const completed =
-      task &&
-      task.human_gate &&
-      task.human_gate.decision === "approved"
-        ? 6
-        : 5;
+      lifecycleCompleted[task?.status] || 0;
 
     sequence.forEach(function (name, index) {
 

@@ -44,7 +44,8 @@
   "status": {
     "approved": "Approved",
     "pending": "Pending",
-    "implementing": "Implementing"
+    "implementing": "Implementing",
+    "evidenced": "Evidenced"
   },
   "readonly": "Read-only console · state is derived from repository data"
 }

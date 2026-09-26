@@ -17,10 +17,10 @@ def current_task():
 
 class StateModelTests(unittest.TestCase):
 
-    def test_current_t00_is_implementing(self):
+    def test_current_t00_is_evidenced(self):
         task = current_task()
 
-        self.assertEqual(task["status"], "implementing")
+        self.assertEqual(task["status"], "evidenced")
         self.assertEqual(
             task["human_gate"]["decision"],
             "approved",
@@ -35,7 +35,7 @@ class StateModelTests(unittest.TestCase):
         )
 
         self.assertTrue(result.valid)
-        self.assertEqual(task["status"], "implementing")
+        self.assertEqual(task["status"], "evidenced")
         self.assertNotEqual(task["status"], "accepted")
 
     def test_rejected_human_gate_blocks_implementation(self):

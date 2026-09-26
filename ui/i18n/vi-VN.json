@@ -44,7 +44,8 @@
   "status": {
     "approved": "Đã phê duyệt",
     "pending": "Đang chờ",
-    "implementing": "Đang triển khai"
+    "implementing": "Đang triển khai",
+    "evidenced": "Đã lập bằng chứng"
   },
   "readonly": "Giao diện chỉ đọc · trạng thái được lấy từ repository"
 }
