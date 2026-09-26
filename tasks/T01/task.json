@@ -1,0 +1,24 @@
+{
+  "task_id": "T01",
+  "title": "Canonical Meta-Model",
+  "version": "0.2.0",
+  "status": "gated",
+  "objective": "Establish the machine-verifiable canonical structural language for AIOS so subsequent kernels, domains, capabilities, agents, workspaces, decisions, evidence, and changes share consistent concepts, references, lifecycle semantics, and invariants.",
+  "human_gate_required": true,
+  "implementation_allowed_before_gate": false,
+  "required_outputs": [
+    "canonical meta-model contract",
+    "canonical object schemas",
+    "canonical reference model",
+    "canonical lifecycle model",
+    "meta-model invariants",
+    "versioning strategy",
+    "validation tests",
+    "engineering evidence",
+    "acceptance package"
+  ],
+  "human_gate": {
+    "decision": "approved",
+    "record": "governance/decisions/T01_HUMAN_GATE.md"
+  }
+}
