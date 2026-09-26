@@ -1,72 +1,43 @@
-# AIOS HDC Execution Kit v0.2
+# AIOS Integrated Prototype v0.3
 
-AIOS HDC Execution Kit is the execution and governance framework for
-Human-Directed Coding (HDC) in AIOS.
+Runnable AIOS prototype for Human review.
 
-## Core principle
+## Included
 
-AI performs software engineering under Human authority and acceptance.
+- Login, Identity/Role/Context/Authority workspace
+- Foundation People/Student/Organization Excel import persisted in SQLite
+- Admin account/role management
+- Data records persisted in SQLite
+- AI Agent Registry with Personal, Domain, Admin, Verification, Data/Semantic and Institutional Intelligence agents
+- Multi-provider adapters: OpenAI, Anthropic, Gemini and OpenAI-compatible endpoints
+- Provider/model registry with server-side environment secrets only
+- AI run audit trail
+- Static GitHub review mode plus full Codespaces/server runtime
 
-The Human owns:
+## Full runtime
 
-- purpose;
-- institutional meaning;
-- standards;
-- authority;
-- responsibility;
-- acceptance.
+```bash
+python -m pip install -e .
+python -m hdc.prototype_server --host 0.0.0.0 --port 8000
+```
 
-AI may perform:
+Open the Codespaces forwarded port 8000.
 
-- repository discovery;
-- modelling;
-- architecture preparation;
-- contract preparation;
-- implementation;
-- testing;
-- verification;
-- replay;
-- evidence preparation;
-- operational tooling.
+Provider secrets are optional and are never placed in browser code:
 
-AI does not acquire institutional authority by performing technical work.
+```bash
+export OPENAI_API_KEY='...'
+export ANTHROPIC_API_KEY='...'
+export GEMINI_API_KEY='...'
+```
 
-## Execution sequence
+Provider/model bindings are managed in **Administration → Provider Registry** and **AI Agent Registry**.
 
-UNDERSTAND
--> DISCOVER
--> MODEL
--> CONTRACT
--> ARCHITECT
--> HUMAN GATE
--> IMPLEMENT
--> TEST
--> VERIFY
--> REPLAY
--> EVIDENCE
--> HUMAN ACCEPTANCE
+## GitHub review page
 
-## Repository model
+The repository root contains `index.html`, which redirects to `ui/`. GitHub Pages can therefore publish the branch from **/(root)**. In this mode AIOS displays the complete interface, Agent Registry and Provider Registry with demo/synthetic responses; backend-only functions are clearly marked as requiring runtime.
 
-- `governance/` - authority and acceptance rules
-- `contracts/` - machine-verifiable execution contracts
-- `hdc/` - HDC runtime
-- `tasks/` - ordered implementation tasks
-- `change-packages/` - proposed engineering changes
-- `engineering-evidence/` - verification evidence
-- `acceptance-packages/` - material for Human acceptance
-- `manifests/` - domain, capability, agent and workspace declarations
-- `docs/` - architecture and protocol documentation
-- `.github/workflows/` - automated repository enforcement
+## Runtime data
 
-## Version
-
-Current baseline: `0.2.0`
-
-## Bootstrap status
-
-This repository initially contains the architecture required to build the HDC
-execution system.
-
-The HDC Guard itself is implemented through Task T00 and is not assumed to be
-trusted before T00 verification and Human acceptance.
+Default SQLite database: `runtime/aios-prototype.sqlite3`.
+Set `AIOS_DB_PATH` to a persistent server/Codespaces path when desired. Source `.xlsx` uploads are parsed in memory and are not retained by the app.

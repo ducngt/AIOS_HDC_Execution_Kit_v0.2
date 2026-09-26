@@ -4,11 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aios-hdc"
-version = "0.2.0"
+version = "0.3.0"
 description = "Human-Directed Coding Execution Kit for AIOS"
 requires-python = ">=3.11"
 dependencies = [
-    "jsonschema>=4.22,<5"
+    "jsonschema>=4.22,<5",
+    "openpyxl>=3.1,<4"
 ]
 
 [project.scripts]
