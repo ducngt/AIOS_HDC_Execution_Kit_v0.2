@@ -47,7 +47,7 @@ class CliTests(unittest.TestCase):
                     "task_id": "INVALID",
                     "title": "Bad",
                     "version": "0.2.0",
-                    "status": "approved",
+                    "status": "implementing",
                     "objective": "Negative test",
                     "human_gate_required": True,
                     "implementation_allowed_before_gate": False,

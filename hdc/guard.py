@@ -97,6 +97,28 @@ def evaluate_governance(
             _schema_issues(evidence, "evidence", "evidence")
         )
 
+    if task["status"] == "accepted" and acceptance is None:
+        issues.append(
+            GuardIssue(
+                "ACCEPTANCE_REQUIRED_FOR_ACCEPTED_STATE",
+                "Task lifecycle cannot be accepted without a "
+                "Human Acceptance Package.",
+            )
+        )
+
+    if (
+        task["status"] == "accepted"
+        and acceptance is not None
+        and acceptance.get("decision") != "accepted"
+    ):
+        issues.append(
+            GuardIssue(
+                "ACCEPTANCE_DECISION_MISMATCH",
+                "Task lifecycle cannot be accepted unless the "
+                "Human Acceptance decision is accepted.",
+            )
+        )
+
     if acceptance is not None:
         issues.extend(
             _schema_issues(

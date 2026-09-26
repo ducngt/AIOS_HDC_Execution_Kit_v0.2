@@ -43,7 +43,8 @@
   },
   "status": {
     "approved": "Đã phê duyệt",
-    "pending": "Đang chờ"
+    "pending": "Đang chờ",
+    "implementing": "Đang triển khai"
   },
   "readonly": "Giao diện chỉ đọc · trạng thái được lấy từ repository"
 }

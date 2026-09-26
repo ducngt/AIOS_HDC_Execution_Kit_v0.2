@@ -30,13 +30,15 @@
       "type": "string",
       "enum": [
         "proposed",
-        "approved",
+        "contracted",
+        "gated",
         "implementing",
+        "testing",
         "verified",
+        "replayed",
+        "evidenced",
         "awaiting_acceptance",
-        "accepted",
-        "rejected",
-        "changes_requested"
+        "accepted"
       ]
     },
     "objective": {
@@ -68,6 +70,7 @@
         "decision": {
           "type": "string",
           "enum": [
+            "pending",
             "approved",
             "rejected",
             "changes_requested"

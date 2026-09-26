@@ -31,7 +31,7 @@ class ContractSchemaTests(unittest.TestCase):
             "task_id": "T00",
             "title": "HDC Guard",
             "version": "0.2.0",
-            "status": "approved",
+            "status": "implementing",
             "objective": "Establish HDC governance baseline.",
             "human_gate_required": True,
             "implementation_allowed_before_gate": False,
@@ -49,7 +49,7 @@ class ContractSchemaTests(unittest.TestCase):
             "task_id": "BAD",
             "title": "Invalid",
             "version": "0.2.0",
-            "status": "approved",
+            "status": "implementing",
             "objective": "Invalid task.",
             "human_gate_required": True,
             "implementation_allowed_before_gate": False
