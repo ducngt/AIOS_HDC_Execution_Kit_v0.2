@@ -1,0 +1,138 @@
+{
+  "meta_model_id": "CMM-AIOS-CORE",
+  "version": "0.1.0",
+  "namespace": "aios.core",
+  "concept_families": [
+    {
+      "name": "Identity",
+      "purpose": "Canonical identity-bearing actor or system identity."
+    },
+    {
+      "name": "Organization",
+      "purpose": "Institutional organization and relationship structures."
+    },
+    {
+      "name": "Role",
+      "purpose": "Role definitions and role assignments."
+    },
+    {
+      "name": "Context",
+      "purpose": "Current operational context and scope."
+    },
+    {
+      "name": "Authority",
+      "purpose": "Institutional authority grants and boundaries."
+    },
+    {
+      "name": "Delegation",
+      "purpose": "Time- and scope-bound delegation of authority."
+    },
+    {
+      "name": "Policy",
+      "purpose": "Rules governing permitted and required behavior."
+    },
+    {
+      "name": "Semantic",
+      "purpose": "Canonical meanings, definitions, and relationships."
+    },
+    {
+      "name": "Capability",
+      "purpose": "Discoverable system capability independent of authority."
+    },
+    {
+      "name": "Contract",
+      "purpose": "Machine-verifiable interaction contract."
+    },
+    {
+      "name": "Domain",
+      "purpose": "Composable functional domain independent of organization units."
+    },
+    {
+      "name": "Work",
+      "purpose": "Work items, assignments, actions, and work state."
+    },
+    {
+      "name": "Decision",
+      "purpose": "Human or authorized institutional decision object."
+    },
+    {
+      "name": "Evidence",
+      "purpose": "Evidence, source, provenance, and result structures."
+    },
+    {
+      "name": "Event",
+      "purpose": "Versioned event structures."
+    },
+    {
+      "name": "Agent",
+      "purpose": "AI agent identity, capabilities, scope, and supervision."
+    },
+    {
+      "name": "Change",
+      "purpose": "Governed system change, verification, and acceptance."
+    }
+  ],
+  "invariants": [
+    {
+      "id": "INV-IDENTITY-ROLE",
+      "left": "Identity",
+      "relation": "distinct_from",
+      "right": "Role",
+      "description": "Identity and Role are structurally distinct concepts."
+    },
+    {
+      "id": "INV-ROLE-AUTHORITY",
+      "left": "Role",
+      "relation": "distinct_from",
+      "right": "Authority",
+      "description": "Role assignment does not itself constitute authority."
+    },
+    {
+      "id": "INV-CAPABILITY-AUTHORITY",
+      "left": "Capability",
+      "relation": "distinct_from",
+      "right": "Authority",
+      "description": "Technical capability does not create institutional authority."
+    },
+    {
+      "id": "INV-EVIDENCE-DECISION",
+      "left": "Evidence",
+      "relation": "distinct_from",
+      "right": "Decision",
+      "description": "Evidence may support a decision but is not itself a decision."
+    },
+    {
+      "id": "INV-AI-RECOMMENDATION-DECISION",
+      "left": "AIRecommendation",
+      "relation": "distinct_from",
+      "right": "Decision",
+      "description": "AI recommendation must not be represented as Human decision."
+    },
+    {
+      "id": "INV-DOMAIN-ORGANIZATION",
+      "left": "Domain",
+      "relation": "distinct_from",
+      "right": "OrganizationUnit",
+      "description": "Domain definitions must not be hard-coded to organization structure."
+    },
+    {
+      "id": "INV-CURRENT-STATE-HISTORY",
+      "left": "CurrentState",
+      "relation": "distinct_from",
+      "right": "History",
+      "description": "Current state must not replace lifecycle history or provenance."
+    },
+    {
+      "id": "INV-REGISTRY-SOURCE-CODE",
+      "left": "RegistryConfiguration",
+      "relation": "distinct_from",
+      "right": "SourceCodeHardCoding",
+      "description": "Registry-governed configuration must not depend on source-code hard-coding."
+    }
+  ],
+  "versioning": {
+    "scheme": "semantic-versioning",
+    "compatibility_policy": "Breaking canonical contract changes require a major version.",
+    "reference_policy": "References identify targets explicitly and may constrain compatible versions."
+  }
+}

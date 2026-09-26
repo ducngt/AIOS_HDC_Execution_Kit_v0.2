@@ -109,6 +109,11 @@ def build_parser() -> argparse.ArgumentParser:
             "change",
             "evidence",
             "acceptance",
+            "canonical-identity",
+            "canonical-reference",
+            "canonical-lifecycle",
+            "canonical-object",
+            "canonical-meta-model",
         ],
     )
     validate_parser.add_argument("file")

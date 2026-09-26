@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
 
 
@@ -20,6 +20,11 @@ SCHEMAS = {
     "change": "change-package.schema.json",
     "evidence": "engineering-evidence.schema.json",
     "acceptance": "acceptance-package.schema.json",
+    "canonical-identity": "canonical-identity.schema.json",
+    "canonical-reference": "canonical-reference.schema.json",
+    "canonical-lifecycle": "canonical-lifecycle.schema.json",
+    "canonical-object": "canonical-object.schema.json",
+    "canonical-meta-model": "canonical-meta-model.schema.json",
 }
 
 
@@ -93,7 +98,10 @@ def validate_document(
     contract_type: str,
 ) -> ValidationResult:
     schema = load_schema(contract_type)
-    validator = Draft202012Validator(schema)
+    validator = Draft202012Validator(
+        schema,
+        format_checker=FormatChecker(),
+    )
 
     errors = sorted(
         validator.iter_errors(document),

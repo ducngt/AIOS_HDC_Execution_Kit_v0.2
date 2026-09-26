@@ -2,7 +2,7 @@
   "task_id": "T01",
   "title": "Canonical Meta-Model",
   "version": "0.2.0",
-  "status": "gated",
+  "status": "implementing",
   "objective": "Establish the machine-verifiable canonical structural language for AIOS so subsequent kernels, domains, capabilities, agents, workspaces, decisions, evidence, and changes share consistent concepts, references, lifecycle semantics, and invariants.",
   "human_gate_required": true,
   "implementation_allowed_before_gate": false,
