@@ -45,7 +45,8 @@
     "approved": "Đã phê duyệt",
     "pending": "Đang chờ",
     "implementing": "Đang triển khai",
-    "evidenced": "Đã lập bằng chứng"
+    "evidenced": "Đã lập bằng chứng",
+    "accepted": "Đã chấp nhận"
   },
   "readonly": "Giao diện chỉ đọc · trạng thái được lấy từ repository"
 }

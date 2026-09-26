@@ -81,6 +81,12 @@ class CliTests(unittest.TestCase):
             "guard",
             "--task",
             "tasks/T00/task.json",
+            "--change",
+            "change-packages/CP-T00.json",
+            "--evidence",
+            "engineering-evidence/EE-T00.json",
+            "--acceptance",
+            "acceptance-packages/AP-T00.json",
             "--root",
             ".",
         ])

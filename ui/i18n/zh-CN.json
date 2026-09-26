@@ -45,7 +45,8 @@
     "approved": "已批准",
     "pending": "待处理",
     "implementing": "实施中",
-    "evidenced": "已形成证据"
+    "evidenced": "已形成证据",
+    "accepted": "已验收"
   },
   "readonly": "只读控制台 · 状态来源于代码仓库"
 }

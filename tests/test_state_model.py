@@ -17,17 +17,18 @@ def current_task():
 
 class StateModelTests(unittest.TestCase):
 
-    def test_current_t00_is_evidenced(self):
+    def test_current_t00_is_accepted(self):
         task = current_task()
 
-        self.assertEqual(task["status"], "evidenced")
+        self.assertEqual(task["status"], "accepted")
         self.assertEqual(
             task["human_gate"]["decision"],
             "approved",
         )
 
     def test_human_gate_approval_does_not_imply_acceptance(self):
-        task = current_task()
+        task = copy.deepcopy(current_task())
+        task["status"] = "evidenced"
 
         result = evaluate_governance(
             task=task,
@@ -35,11 +36,16 @@ class StateModelTests(unittest.TestCase):
         )
 
         self.assertTrue(result.valid)
+        self.assertEqual(
+            task["human_gate"]["decision"],
+            "approved",
+        )
         self.assertEqual(task["status"], "evidenced")
         self.assertNotEqual(task["status"], "accepted")
 
     def test_rejected_human_gate_blocks_implementation(self):
         task = copy.deepcopy(current_task())
+        task["status"] = "implementing"
         task["human_gate"]["decision"] = "rejected"
 
         result = evaluate_governance(
@@ -75,8 +81,8 @@ if __name__ == "__main__":
 class AcceptanceDecisionSemanticsTests(unittest.TestCase):
 
     def test_pending_human_gate_is_schema_valid_but_not_authorized(self):
-        task = current_task()
-        task = copy.deepcopy(task)
+        task = copy.deepcopy(current_task())
+        task["status"] = "implementing"
         task["human_gate"]["decision"] = "pending"
 
         result = evaluate_governance(
