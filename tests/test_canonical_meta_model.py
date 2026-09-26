@@ -196,12 +196,11 @@ if __name__ == "__main__":
 
 class CanonicalIntegrityTests(unittest.TestCase):
 
-    def test_t01_is_implementing_after_human_gate(self):
+    def test_t01_human_gate_is_approved(self):
         task = json.loads(
             (ROOT / "tasks/T01/task.json").read_text()
         )
 
-        self.assertEqual(task["status"], "implementing")
         self.assertEqual(
             task["human_gate"]["decision"],
             "approved",

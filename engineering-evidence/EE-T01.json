@@ -1,0 +1,31 @@
+{
+  "evidence_id": "EE-T01",
+  "task_id": "T01",
+  "change_id": "CP-T01",
+  "test_results": {
+    "status": "pass",
+    "canonical_tests": "16/16 PASS",
+    "full_regression": "56/56 PASS"
+  },
+  "verification_results": {
+    "status": "pass",
+    "canonical_meta_model": "pass",
+    "identity_version_reference_rules": "pass",
+    "identity_role_authority_distinction": "pass",
+    "capability_authority_distinction": "pass",
+    "domain_organization_distinction": "pass",
+    "lifecycle_history_provenance_distinction": "pass",
+    "invalid_object_rejection": "pass",
+    "cross_object_reference_integrity": "pass",
+    "versioning_strategy": "pass",
+    "t00_baseline_preserved": "pass"
+  },
+  "replay_results": {
+    "status": "pass",
+    "commit": "7f347cf423b2d93c02031dbced6756970c431387",
+    "clean_checkout": true,
+    "canonical_tests": "16/16 PASS",
+    "full_regression": "56/56 PASS",
+    "t00_guard": "pass"
+  }
+}
