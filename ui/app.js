@@ -32,7 +32,96 @@
            key;
   }
 
-  async function getJson(path) {
+  
+const TASK_REGISTRY_URL = "./tasks/index.json";
+
+let taskRegistry = [];
+let activeTask = null;
+let activeChange = null;
+let activeEvidence = null;
+let activeAcceptance = null;
+
+async function getOptionalJson(path) {
+  try {
+    return await getJson(path);
+  } catch (error) {
+    return null;
+  }
+}
+
+async function loadTaskRegistry() {
+  taskRegistry = await getJson(TASK_REGISTRY_URL);
+
+  const selector = document.getElementById("taskSelector");
+  if (!selector) return;
+
+  selector.innerHTML = "";
+
+  for (const item of taskRegistry) {
+    const option = document.createElement("option");
+    option.value = item.task_id;
+    option.textContent =
+      `${item.task_id} · ${item.title} · ${item.status}`;
+    selector.appendChild(option);
+  }
+
+  selector.addEventListener("change", async (event) => {
+    await loadSelectedTask(event.target.value);
+  });
+}
+
+async function loadSelectedTask(taskId) {
+  if (!taskRegistry.length) {
+    await loadTaskRegistry();
+  }
+
+  const selected =
+    taskRegistry.find((item) => item.task_id === taskId) ||
+    taskRegistry[taskRegistry.length - 1];
+
+  if (!selected) {
+    throw new Error("No HDC task available for review.");
+  }
+
+  const selector = document.getElementById("taskSelector");
+  if (selector) selector.value = selected.task_id;
+
+  activeTask = await getJson(selected.task_path);
+
+  activeChange = selected.change_path
+    ? await getOptionalJson(selected.change_path)
+    : null;
+
+  activeEvidence = selected.evidence_path
+    ? await getOptionalJson(selected.evidence_path)
+    : null;
+
+  activeAcceptance = selected.acceptance_path
+    ? await getOptionalJson(selected.acceptance_path)
+    : null;
+
+  const title = document.getElementById("taskTitle");
+  if (title) {
+    title.textContent =
+      `${activeTask.task_id} · ${activeTask.title}`;
+  }
+
+  window.currentTask = activeTask;
+  window.currentChange = activeChange;
+  window.currentEvidence = activeEvidence;
+  window.currentAcceptance = activeAcceptance;
+
+  if (typeof renderApp === "function") {
+    renderApp(
+      activeTask,
+      activeChange,
+      activeEvidence,
+      activeAcceptance
+    );
+  }
+}
+
+async function getJson(path) {
     const response = await fetch(path, { cache: "no-store" });
 
     if (!response.ok) {
@@ -233,7 +322,7 @@
     await applyLocale(saved);
 
     task =
-      await getJson("./tasks/T00/task.json");
+      await loadSelectedTask();
 
     renderTask();
 
