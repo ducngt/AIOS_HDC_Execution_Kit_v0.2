@@ -1,0 +1,52 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "work": "Work",
+    "data": "Data",
+    "workspace": "Workspace",
+    "ai": "AI",
+    "admin": "Administration"
+  },
+  "context": {
+    "overview": "Overview",
+    "contract": "Contract",
+    "implementation": "Implementation",
+    "test": "Test",
+    "verify": "Verify",
+    "evidence": "Evidence",
+    "audit": "Audit"
+  },
+  "dashboard": {
+    "kit": "Execution Kit",
+    "task": "Current Task",
+    "status": "Status",
+    "gate": "Human Gate",
+    "sequence": "Execution Sequence",
+    "contract": "T00 Contract",
+    "authority": "Human Authority",
+    "decision": "Decision Record"
+  },
+  "fields": {
+    "taskId": "Task ID",
+    "title": "Title",
+    "objective": "Objective",
+    "gateRequired": "Human Gate Required",
+    "beforeGate": "Implementation Before Gate"
+  },
+  "authority": {
+    "decision": "Decision",
+    "implementation": "Implementation Authority",
+    "acceptance": "Final Acceptance",
+    "source": "Source",
+    "authorized": "Authorized",
+    "notGranted": "Not Granted"
+  },
+  "status": {
+    "approved": "Approved",
+    "pending": "Pending",
+    "implementing": "Implementing",
+    "evidenced": "Evidenced",
+    "accepted": "Accepted"
+  },
+  "readonly": "Read-only console · state is derived from repository data"
+}
