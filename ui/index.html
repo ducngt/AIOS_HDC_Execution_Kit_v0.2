@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="vi-VN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AIOS HDC Control Console</title>
+  <link rel="stylesheet" href="./app.css">
+</head>
+
+<body>
+
+<header class="global-header">
+  <div class="global-bar">
+
+    <div class="brand">AIOS</div>
+
+    <nav class="global-nav">
+      <a class="active" href="#" data-t="nav.overview"></a>
+      <a href="#" data-t="nav.work"></a>
+      <a href="#" data-t="nav.data"></a>
+      <a href="#" data-t="nav.workspace"></a>
+      <a href="#" data-t="nav.ai"></a>
+      <a href="#" data-t="nav.admin"></a>
+    </nav>
+
+    <div class="language">
+      <select id="localeSelect"
+              aria-label="Language"></select>
+    </div>
+
+  </div>
+</header>
+
+<section class="context">
+  <div class="context-inner">
+
+    <div class="context-top">
+      <h1 class="context-title">T00 · HDC Guard</h1>
+      <div id="gatePill" class="gate-pill">—</div>
+    </div>
+
+    <nav class="context-nav">
+      <a class="active" href="#" data-t="context.overview"></a>
+      <a href="#" data-t="context.contract"></a>
+      <a href="#" data-t="context.implementation"></a>
+      <a href="#" data-t="context.test"></a>
+      <a href="#" data-t="context.verify"></a>
+      <a href="#" data-t="context.evidence"></a>
+      <a href="#" data-t="context.audit"></a>
+    </nav>
+
+  </div>
+</section>
+
+<main class="workspace">
+
+  <div id="errorBox" class="error"></div>
+
+  <section class="cards">
+
+    <div class="card">
+      <div class="label" data-t="dashboard.kit"></div>
+      <div class="value">v0.2.0</div>
+    </div>
+
+    <div class="card">
+      <div class="label" data-t="dashboard.task"></div>
+      <div id="taskId" class="value">—</div>
+    </div>
+
+    <div class="card">
+      <div class="label" data-t="dashboard.status"></div>
+      <div id="taskStatus" class="value">—</div>
+    </div>
+
+    <div class="card">
+      <div class="label" data-t="dashboard.gate"></div>
+      <div id="gateStatus" class="value human">—</div>
+    </div>
+
+  </section>
+
+  <section class="card section">
+    <div class="label" data-t="dashboard.sequence"></div>
+    <div id="sequence" class="sequence"></div>
+  </section>
+
+  <section class="card section">
+    <div class="label" data-t="dashboard.contract"></div>
+
+    <table>
+      <tbody>
+        <tr>
+          <th data-t="fields.taskId"></th>
+          <td id="fieldTaskId"></td>
+        </tr>
+        <tr>
+          <th data-t="fields.title"></th>
+          <td id="fieldTitle"></td>
+        </tr>
+        <tr>
+          <th data-t="fields.objective"></th>
+          <td id="fieldObjective"></td>
+        </tr>
+        <tr>
+          <th data-t="fields.gateRequired"></th>
+          <td id="fieldGateRequired"></td>
+        </tr>
+        <tr>
+          <th data-t="fields.beforeGate"></th>
+          <td id="fieldBeforeGate"></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card section authority">
+
+    <div class="label" data-t="dashboard.authority"></div>
+
+    <div class="authority-grid">
+
+      <div>
+        <div class="label" data-t="authority.decision"></div>
+        <strong id="authorityDecision"></strong>
+      </div>
+
+      <div>
+        <div class="label" data-t="authority.implementation"></div>
+        <strong id="implementationAuthority"></strong>
+      </div>
+
+      <div>
+        <div class="label" data-t="authority.acceptance"></div>
+        <strong data-t="authority.notGranted"></strong>
+      </div>
+
+      <div>
+        <div class="label" data-t="authority.source"></div>
+        <strong id="authoritySource"></strong>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="card section">
+    <div class="label" data-t="dashboard.decision"></div>
+    <pre id="decisionRecord">—</pre>
+  </section>
+
+  <div class="readonly" data-t="readonly"></div>
+
+</main>
+
+<script src="./app.js"></script>
+
+</body>
+</html>
