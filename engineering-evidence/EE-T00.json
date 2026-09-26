@@ -1,0 +1,43 @@
+{
+  "evidence_id": "EE-T00",
+  "task_id": "T00",
+  "change_id": "CP-T00",
+  "test_results": {
+    "status": "pass",
+    "framework": "unittest",
+    "tests_run": 40,
+    "command": "python -m unittest discover -s tests -v",
+    "result": "40/40 PASS"
+  },
+  "verification_results": {
+    "status": "pass",
+    "criteria": {
+      "V01_contract_schema_integrity": "pass",
+      "V02_invalid_state_rejection": "pass",
+      "V03_human_acceptance_boundary": "pass",
+      "V04_change_task_linkage": "pass",
+      "V05_evidence_change_linkage": "pass",
+      "V06_automated_regression": "pass",
+      "V07_ci_executes_guard": "pass",
+      "V08_actionable_diagnostics": "pass",
+      "V09_repository_invariants": "pass",
+      "V10_clean_checkout_replay": "pass",
+      "V11_runtime_secret_hygiene": "pass",
+      "V12_explicit_human_acceptance_boundary": "pass"
+    },
+    "contract_validation": "pass",
+    "governance_guard": "pass",
+    "git_diff_check": "pass",
+    "review_build": "pass"
+  },
+  "replay_results": {
+    "status": "pass",
+    "commit": "e7a8015cff57a7352fa5d7e7bad8feb9beff032c",
+    "clean_checkout": true,
+    "tests_run": 40,
+    "contract_validation": "pass",
+    "governance_guard": "pass",
+    "review_build": "pass",
+    "repository_remained_clean": true
+  }
+}
