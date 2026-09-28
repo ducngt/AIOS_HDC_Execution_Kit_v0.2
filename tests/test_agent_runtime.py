@@ -76,7 +76,8 @@ class ProviderConfigurationTests(unittest.TestCase):
         from hdc.agent_store import provider_diagnostic
         old = os.environ.pop("OPENAI_API_KEY", None)
         try:
-            result = provider_diagnostic("openai")
+            with patch("hdc.secret_store._read", return_value={}):
+                result = provider_diagnostic("openai")
             self.assertFalse(result["ok"])
             self.assertFalse(result["configured"])
             self.assertIn("OPENAI_API_KEY", result["detail"])

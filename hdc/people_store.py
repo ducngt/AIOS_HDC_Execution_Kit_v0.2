@@ -14,7 +14,7 @@ import os
 import sqlite3
 import uuid
 from dataclasses import dataclass
-from datetime import date, datetime, timezone
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -167,7 +167,7 @@ def ensure_schema(con: sqlite3.Connection) -> None:
 
 
 def now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
 
 
 def clean(value: Any) -> Any:
@@ -454,12 +454,32 @@ def _password_digest(password: str, salt_hex: str) -> str:
     return hashlib.pbkdf2_hmac("sha256", password.encode(), bytes.fromhex(salt_hex), 180000).hex()
 
 
-def set_password(con: sqlite3.Connection, account_id: str, password: str) -> None:
+def set_password(
+    con: sqlite3.Connection,
+    account_id: str,
+    password: str,
+    *,
+    must_change_password: bool = True,
+) -> None:
     if len(password) < 6:
-        raise ValueError("Mật khẩu tạm thời phải có ít nhất 6 ký tự")
+        raise ValueError("Mật khẩu phải có ít nhất 6 ký tự")
     salt = secrets.token_hex(16)
     digest = _password_digest(password, salt)
-    con.execute("UPDATE accounts SET password_hash=?,password_salt=?,must_change_password=1,updated_at=? WHERE account_id=?", (digest, salt, now(), account_id))
+    con.execute(
+        """UPDATE accounts
+           SET password_hash=?,
+               password_salt=?,
+               must_change_password=?,
+               updated_at=?
+           WHERE account_id=?""",
+        (
+            digest,
+            salt,
+            1 if must_change_password else 0,
+            now(),
+            account_id,
+        ),
+    )
 
 
 def authenticate(username: str, password: str) -> dict[str, Any] | None:
@@ -471,18 +491,6 @@ def authenticate(username: str, password: str) -> dict[str, Any] | None:
             return None
         roles=[dict(x) for x in con.execute("SELECT role_code,scope,active FROM role_assignments WHERE account_id=? AND active=1 ORDER BY role_code",(row["account_id"],)).fetchall()]
         return {"account_id":row["account_id"],"person_id":row["person_id"],"name":row["display_name"],"email":row["email"],"username":row["username"],"status":row["status"],"locale":row["locale"],"must_change_password":bool(row["must_change_password"]),"roles":roles}
-
-
-
-def change_password(account_id: str, current_password: str, new_password: str) -> None:
-    if len(new_password) < 12:
-        raise ValueError("new_password_too_short")
-    with connect() as con:
-        row = con.execute("SELECT password_hash,password_salt FROM accounts WHERE account_id=? AND status='active'", (account_id,)).fetchone()
-        if not row or not row['password_hash'] or not secrets.compare_digest(row['password_hash'], _password_digest(current_password, row['password_salt'])):
-            raise ValueError("invalid_credentials")
-        set_password(con, account_id, new_password)
-        con.execute("UPDATE accounts SET must_change_password=0 WHERE account_id=?", (account_id,))
 
 
 def save_account(payload: dict[str, Any]) -> dict[str, Any]:

@@ -55,12 +55,15 @@ class AuthAPITests(unittest.TestCase):
         self.assertEqual(self.call('/api/admin/provider-secret', payload={'provider_id': 'openai', 'api_key': 'SECRET'})[0], 401)
         status, result = self.login('firstadmin', 'StrongPassword123!')
         self.assertEqual(status, 200)
+        self.assertEqual(self.call('/api/auth/login', payload={'username':'firstadmin','password':'StrongPassword123!'}, origin=self.base)[0], 200)
+        self.assertEqual(self.call('/api/auth/login', payload={'username':'firstadmin','password':'StrongPassword123!'}, origin='https://evil.example')[0], 403)
         admin = result['token']
         self.assertEqual(self.call('/api/admin/accounts', admin)[0], 403)
         self.assertEqual(self.call('/api/auth/change-password', admin, {'current_password': 'StrongPassword123!', 'new_password': 'NewPassword123!'} )[0], 200)
         self.assertEqual(self.call('/api/admin/accounts', admin)[0], 401)
         admin = self.login('firstadmin', 'NewPassword123!')[1]['token']
         self.assertEqual(self.call('/api/admin/accounts', admin)[0], 200)
+        self.assertEqual(self.call('/api/admin/accounts', admin, origin=self.base)[0], 200)
         lecturer = self.login('lecturer', 'StrongPassword234!')[1]['token']
         self.call('/api/auth/change-password', lecturer, {'current_password': 'StrongPassword234!', 'new_password': 'AnotherPassword234!'})
         lecturer = self.login('lecturer', 'AnotherPassword234!')[1]['token']

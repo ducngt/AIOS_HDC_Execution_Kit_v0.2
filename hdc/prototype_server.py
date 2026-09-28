@@ -8,16 +8,12 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import time
-from collections import defaultdict
 import urllib.parse
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from hdc.auth import current_user, is_admin, issue_session, revoke_session
 from hdc.agent_store import (
     chat,
-    get_agent,
     ensure_seeded,
     list_agents,
     list_providers,
@@ -26,6 +22,12 @@ from hdc.agent_store import (
     save_agent,
     save_provider,
     save_provider_secret,
+)
+from hdc.auth import (
+    current_user,
+    is_admin,
+    issue_session,
+    revoke_session,
 )
 from hdc.people_store import (
     authenticate,
@@ -43,7 +45,6 @@ from hdc.people_store import (
 
 ROOT = Path(__file__).resolve().parents[1]
 UI = ROOT / "ui"
-LOGIN_ATTEMPTS = defaultdict(list)
 
 
 def _load_env_file(path: Path) -> None:
@@ -68,52 +69,77 @@ class Handler(SimpleHTTPRequestHandler):
 
     def end_headers(self):
         origin = self.headers.get("Origin")
-        allowed = {x.strip() for x in os.getenv("AIOS_CORS_ORIGIN", "").split(",") if x.strip()}
-        if origin and origin in allowed:
-            self.send_header("Access-Control-Allow-Origin", origin)
-            self.send_header("Vary", "Origin")
-            self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
-            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        allowed = os.getenv("AIOS_CORS_ORIGIN", "*")
+        if origin and (allowed == "*" or origin in {x.strip() for x in allowed.split(",")}):
+            self.send_header("Access-Control-Allow-Origin", origin if allowed != "*" else "*")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         super().end_headers()
 
-    def do_OPTIONS(self):
+    def _origin_allowed(self):
         origin = self.headers.get("Origin")
-        allowed = {x.strip() for x in os.getenv("AIOS_CORS_ORIGIN", "").split(",") if x.strip()}
-        if origin and origin not in allowed:
-            return self._json(403, {"error": "origin_forbidden"})
+        if not origin:
+            return True
+        allowed = os.getenv("AIOS_CORS_ORIGIN", "*")
+        if allowed == "*":
+            return True
+        allowed_origins = {x.strip() for x in allowed.split(",") if x.strip()}
+        # Same-origin requests to the runtime itself are permitted.
+        host = self.headers.get("Host")
+        if host and origin in {"http://" + host, "https://" + host}:
+            return True
+        return origin in allowed_origins
+
+    def _bearer_token(self):
+        value = self.headers.get("Authorization", "")
+        if not value.startswith("Bearer "):
+            return ""
+        return value[7:].strip()
+
+    def _user(self):
+        return current_user(self._bearer_token())
+
+    def _require_authenticated(self):
+        user = self._user()
+        if not user:
+            self._json(401, {"error": "authentication_required"})
+            return None
+        return user
+
+    def _require_admin(self):
+        user = self._require_authenticated()
+        if not user:
+            return None
+        if user.get("must_change_password"):
+            self._json(403, {"error": "password_change_required"})
+            return None
+        if not is_admin(user):
+            self._json(403, {"error": "admin_required"})
+            return None
+        return user
+
+    def do_OPTIONS(self):
+        if not self._origin_allowed():
+            return self._json(403, {"error": "origin_not_allowed"})
         self.send_response(204)
         self.end_headers()
 
-    def _token(self):
-        header = self.headers.get("Authorization", "")
-        return header[7:] if header.startswith("Bearer ") else ""
-
-    def _authorize(self, path):
-        origin = self.headers.get("Origin")
-        allowed = {x.strip() for x in os.getenv("AIOS_CORS_ORIGIN", "").split(",") if x.strip()}
-        if origin and origin not in allowed:
-            self._json(403, {"error": "origin_forbidden"})
-            return False
-        user = current_user(self._token())
-        if not user:
-            self._json(401, {"error": "authentication_required"})
-            return False
-        if user['must_change_password'] and path not in {'/api/auth/change-password', '/api/auth/logout'}:
-            self._json(403, {"error": "password_change_required"})
-            return False
-        if (path.startswith('/api/admin/') or path in {'/api/ai/providers', '/api/ai/runs', '/api/data/records'}) and not is_admin(user):
-            self._json(403, {"error": "admin_required"})
-            return False
-        self.actor = user
-        return True
-
     def do_GET(self):
+        if not self._origin_allowed():
+            return self._json(403, {"error": "origin_not_allowed"})
         parsed = urllib.parse.urlparse(self.path)
         q = urllib.parse.parse_qs(parsed.query)
-        if parsed.path.startswith("/api/") and parsed.path != "/api/health" and not self._authorize(parsed.path):
-            return
+
+        if parsed.path.startswith("/api/admin/"):
+            if not self._require_admin():
+                return
+
+        if parsed.path in {"/api/ai/providers", "/api/ai/agents",
+                           "/api/ai/runs", "/api/data/records"}:
+            if not self._require_admin():
+                return
         if parsed.path == "/api/health":
-            return self._json(200, {"status": "ok"})
+            return self._json(200, {"status":"ok","database":database_info(),"providers":list_providers()})
         if parsed.path == "/api/admin/stats":
             return self._json(200, stats())
         if parsed.path == "/api/admin/people":
@@ -137,52 +163,113 @@ class Handler(SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):
-        if self.path.startswith("/api/") and self.path != "/api/auth/login" and not self._authorize(self.path):
-            return
+        if not self._origin_allowed():
+            return self._json(403, {"error": "origin_not_allowed"})
         try:
             body = self._read_json()
         except ValueError as exc:
             return self._json(400, {"error": "invalid_json", "detail": str(exc)})
 
         if self.path == "/api/auth/login":
-            origin = self.headers.get("Origin")
-            allowed = {x.strip() for x in os.getenv("AIOS_CORS_ORIGIN", "").split(",") if x.strip()}
-            if origin and origin not in allowed:
-                return self._json(403, {"error": "origin_forbidden"})
-            ip = self.client_address[0]
-            now = time.monotonic()
-            LOGIN_ATTEMPTS[ip] = [t for t in LOGIN_ATTEMPTS[ip] if now - t < 300]
-            if len(LOGIN_ATTEMPTS[ip]) >= 10:
-                return self._json(429, {"error": "too_many_attempts"})
-            user = authenticate(str(body.get("username") or ""), str(body.get("password") or ""))
+            user = authenticate(
+                str(body.get("username") or ""),
+                str(body.get("password") or ""),
+            )
             if not user:
-                LOGIN_ATTEMPTS[ip].append(now)
-                return self._json(401, {"error":"invalid_credentials"})
-            LOGIN_ATTEMPTS.pop(ip, None)
-            return self._json(200, {"user": user, "token": issue_session(user['account_id'])})
+                return self._json(401, {"error": "invalid_credentials"})
+            token = issue_session(user["account_id"])
+            return self._json(200, {"user": user, "token": token})
+
         if self.path == "/api/auth/logout":
-            revoke_session(self._token())
+            token = self._bearer_token()
+            if not current_user(token):
+                return self._json(401, {"error": "authentication_required"})
+            revoke_session(token)
             return self._json(200, {"ok": True})
+
         if self.path == "/api/auth/change-password":
-            from hdc.people_store import change_password
-            try:
-                change_password(self.actor['account_id'], str(body.get('current_password') or ''), str(body.get('new_password') or ''))
-                revoke_session(self._token())
-                return self._json(200, {"ok": True})
-            except ValueError as exc:
-                return self._json(400, {"error": str(exc)})
+            user = self._require_authenticated()
+            if not user:
+                return
+            current_password = str(body.get("current_password") or "")
+            new_password = str(body.get("new_password") or "")
+            if not authenticate(user["username"], current_password):
+                return self._json(400, {"error": "invalid_current_password"})
+            if len(new_password) < 12:
+                return self._json(400, {"error": "password_too_short"})
+            from hdc.people_store import connect, set_password
+            with connect() as con:
+                set_password(
+                    con,
+                    user["account_id"],
+                    new_password,
+                    must_change_password=False,
+                )
+            revoke_session(self._bearer_token())
+            return self._json(200, {"ok": True})
+
+        if self.path.startswith("/api/admin/"):
+            if not self._require_admin():
+                return
+
+        if self.path in {"/api/ai", "/api/ai/chat", "/api/data/records"}:
+            if not self._require_admin():
+                return
+
         if self.path in {"/api/ai", "/api/ai/chat"}:
             try:
-                agent_id = str(body.get("agent_id") or "personal-ai")
-                agent = get_agent(agent_id)
-                if agent and agent.get('category') in {'admin', 'institutional', 'data'} and not is_admin(self.actor):
-                    return self._json(403, {"error": "agent_forbidden"})
-                context = {"identity": self.actor['account_id'], "role": ', '.join(r['role_code'] for r in self.actor['roles']), "authority": 'server-verified role context'}
-                return self._json(200, chat(agent_id, str(body.get("prompt") or ""), context))
+                user = self._user()
+                if not user:
+                    return self._json(
+                        401,
+                        {"error": "authentication_required"},
+                    )
+
+                client_context = body.get("context") or {}
+
+                # Security boundary:
+                # identity/role/authority used for execution and audit are
+                # derived from the authenticated server-side session, never
+                # trusted from browser-supplied context.
+                roles = [
+                    r for r in user.get("roles", [])
+                    if r.get("active")
+                ]
+                role_codes = [
+                    str(r.get("role_code") or "")
+                    for r in roles
+                    if r.get("role_code")
+                ]
+                scopes = [
+                    str(r.get("scope") or "")
+                    for r in roles
+                    if r.get("scope")
+                ]
+
+                trusted_context = dict(client_context)
+                trusted_context["identity"] = user["account_id"]
+                trusted_context["role"] = ",".join(role_codes)
+                trusted_context["authority"] = ",".join(scopes)
+                trusted_context["authenticated_username"] = user.get("username")
+
+                return self._json(
+                    200,
+                    chat(
+                        str(body.get("agent_id") or "personal-ai"),
+                        str(body.get("prompt") or ""),
+                        trusted_context,
+                    ),
+                )
             except ValueError as exc:
-                return self._json(400, {"error":"invalid_agent_request","detail":str(exc)})
+                return self._json(
+                    400,
+                    {"error": "invalid_agent_request", "detail": str(exc)},
+                )
             except RuntimeError as exc:
-                return self._json(502, {"error":"provider_error","detail":str(exc)})
+                return self._json(
+                    502,
+                    {"error": "provider_error", "detail": str(exc)},
+                )
         if self.path == "/api/admin/import":
             filename = str(body.get("filename") or "upload.xlsx")
             data = str(body.get("data_base64") or "")
@@ -236,8 +323,6 @@ class Handler(SimpleHTTPRequestHandler):
 
     def _read_json(self):
         length = int(self.headers.get("Content-Length", "0"))
-        if length < 0 or length > 12 * 1024 * 1024:
-            raise ValueError("request_too_large")
         try:
             return json.loads(self.rfile.read(length) or b"{}")
         except json.JSONDecodeError as exc:
