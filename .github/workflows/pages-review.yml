@@ -42,7 +42,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: ./scripts/build-review.sh
+
+      - name: Build AIOS review
+        env:
+          AIOS_BACKEND_URL: ${{ vars.AIOS_BACKEND_URL }}
+        run: |
+          test -n "$AIOS_BACKEND_URL" || {
+            echo "AIOS_BACKEND_URL repository variable is not configured"
+            exit 1
+          }
+          ./scripts/build-review.sh
+          grep -F "$AIOS_BACKEND_URL" dist/review/runtime-config.js
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

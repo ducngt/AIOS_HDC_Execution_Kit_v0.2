@@ -1,4 +1,4 @@
-# AIOS Integrated Prototype v0.3
+# AIOS Integrated Prototype v0.3.4
 
 Runnable AIOS prototype for Human review.
 
@@ -47,7 +47,7 @@ Set `AIOS_DB_PATH` to a persistent server/Codespaces path when desired. Source `
 
 Copy `.env.example` to `.env` and place provider keys only in `.env` (never in the browser or Git). The server automatically loads `.env` on startup. Supported adapters are OpenAI Responses, Anthropic Messages, Gemini generateContent, and OpenAI-compatible chat completions. Admin > AI Providers exposes whether a server secret is configured and can run a minimal connectivity test without revealing the key.
 
-## v0.3.2 review/runtime bridge
+## v0.3.4 review/runtime bridge
 
 - GitHub Pages can serve the root UI for Human review.
 - In Administration > Provider Registry, set the public runtime backend URL and click **Kết nối backend**.
