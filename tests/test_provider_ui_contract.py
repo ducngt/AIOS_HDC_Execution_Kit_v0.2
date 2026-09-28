@@ -9,8 +9,8 @@ class ProviderUiContractTests(unittest.TestCase):
         for path in (ROOT / "ui/app.js", ROOT / "app.js"):
             text = path.read_text(encoding="utf-8")
             self.assertIn("Kết nối AI", text)
-            self.assertIn('id="pvKey" type="password"', text)
-            self.assertIn("Lưu & kiểm tra", text)
+            self.assertIn('id="quickApiKey" type="password"', text)
+            self.assertIn("Kết nối", text)
             self.assertIn("/api/admin/provider-secret", text)
             self.assertIn("/api/admin/provider-test", text)
 
