@@ -33,3 +33,22 @@ dist/
 .vscode/
 .idea/
 .DS_Store
+
+# AIOS runtime state
+runtime/*.sqlite3
+runtime/*.sqlite3-*
+runtime/provider-secrets.json
+runtime/*.json
+
+# Generated review/deployment artifacts
+dist/
+
+# Local packages / restore archives
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Local environment
+.env
